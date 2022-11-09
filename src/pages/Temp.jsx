@@ -3,15 +3,10 @@ import axios from "../api/axios";
 
 export default function Temp() {
   useEffect(() => {
-    async function getData() {
-      try {
-        const response = await axios.get("users");
-        console.log(response);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    getData();
+    fetch("http://localhost:8081/users")
+      .then((response) => response.json())
+      .then((json) => console.log(json))
+      .catch();
   }, []);
 
   return <div>Temp</div>;
