@@ -1,13 +1,10 @@
-import React from 'react'
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-} from "react-router-dom";
+import React from "react";
+import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Register from './pages/Register';
-import Login from './pages/Login';
+import "bootstrap/dist/css/bootstrap.min.css";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import { AuthProvider } from "./context/AuthProvider";
 
 const router = createBrowserRouter([
   {
@@ -24,8 +21,10 @@ const router = createBrowserRouter([
   },
 ]);
 
-
 export default function App() {
-  return <RouterProvider router={router} />
-
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
