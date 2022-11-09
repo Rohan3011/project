@@ -11,7 +11,7 @@ const schema = Yup.object().shape({
   password: Yup.string().max(255).required("Password is required"),
 });
 
-const LOGIN_URL = "/api/users/login";
+const LOGIN_URL = "api/users/login";
 
 export default function Login() {
   const { setAuth } = useContext(AuthContext);
