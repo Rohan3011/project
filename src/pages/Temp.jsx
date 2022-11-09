@@ -2,13 +2,11 @@ import React, { useEffect } from "react";
 import axios from "../api/axios";
 
 export default function Temp() {
-  useEffect(async () => {
-    try {
-      const res = axios.get("/api/users");
-      console.log(JSON.stringify(res?.data));
-    } catch (err) {
-      console.log(err);
-    }
+  useEffect(() => {
+    fetch("http://localhost:8081/api/users")
+      .then((response) => response.json())
+      .then((json) => console.log(json))
+      .catch((err) => console.log(err));
   }, []);
 
   return <div>Temp</div>;
