@@ -5,11 +5,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { AuthProvider } from "./context/AuthProvider";
+import Temp from "./pages/temp";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Hello world!</div>,
+    element: <Temp />,
   },
   {
     path: "/register",

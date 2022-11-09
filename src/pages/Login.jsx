@@ -34,12 +34,9 @@ export default function Login() {
           onSubmit={async (values) => {
             try {
               setErrorMsg("");
-              const response = await axios.post(
-                LOGIN_URL,
-                JSON.stringify(values),
-                { headers: { "Cotent-Type": "application/json" } }
-              );
-
+              const response = await axios.post(LOGIN_URL, JSON.stringify({}), {
+                headers: { "Cotent-Type": "application/json" },
+              });
               console.log(JSON.stringify(response?.data));
               setAuth(values);
             } catch (error) {
