@@ -11,7 +11,7 @@ const schema = Yup.object().shape({
   password: Yup.string().max(255).required("Password is required"),
 });
 
-const LOGIN_URL = "api/users/login";
+const LOGIN_URL = "/api/users/login";
 
 export default function Login() {
   const { setAuth } = useContext(AuthContext);
@@ -34,9 +34,10 @@ export default function Login() {
           onSubmit={async (values) => {
             try {
               setErrorMsg("");
-              const response = await axios.post(LOGIN_URL, JSON.stringify({}), {
-                headers: { "Cotent-Type": "application/json" },
-              });
+              const response = await axios.post(
+                LOGIN_URL,
+                JSON.stringify(values)
+              );
               console.log(JSON.stringify(response?.data));
               setAuth(values);
             } catch (error) {
