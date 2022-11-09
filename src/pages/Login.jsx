@@ -41,7 +41,10 @@ export default function Login() {
                 },
                 redirect: "follow",
                 referrerPolicy: "no-referrer",
-                body: JSON.stringify(data),
+                body: JSON.stringify({
+                  userid: values.userId,
+                  password: values.password,
+                }),
               });
               console.log(response.json());
               setAuth(values);
