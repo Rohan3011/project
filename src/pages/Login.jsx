@@ -4,14 +4,13 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
-import axios from "../api/axios";
 
 const schema = Yup.object().shape({
   userId: Yup.string().required(),
   password: Yup.string().max(255).required("Password is required"),
 });
 
-const LOGIN_URL = "api/users/login";
+const LOGIN_URL = "http://localhost:8081/api/users/login";
 
 export default function Login() {
   const { setAuth } = useContext(AuthContext);
@@ -34,11 +33,17 @@ export default function Login() {
           onSubmit={async (values) => {
             try {
               setErrorMsg("");
-              const response = await axios.post(
-                LOGIN_URL,
-                JSON.stringify(values)
-              );
-              console.log(JSON.stringify(response?.data));
+              const response = await fetch(LOGIN_URL, {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                redirect: "follow",
+                referrerPolicy: "no-referrer",
+                body: JSON.stringify(data),
+              });
+              console.log(response.json());
               setAuth(values);
             } catch (error) {
               console.log(error);
