@@ -72,11 +72,13 @@ export default function Login() {
                     }),
                   }
                 );
-                console.log(response.json());
+                const data = response.json();
+                console.log(data);
                 setAuth({
                   userid: values.userId,
                   password: values.password,
                   usertype: userType,
+                  ...data,
                 });
                 setSuccess(true);
               } catch (err) {

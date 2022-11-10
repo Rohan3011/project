@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useContext } from "react";
 import { Container, Spinner, Table } from "react-bootstrap";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { RiAlertFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { BATCH_URL } from "../../api";
+import AuthContext from "../../context/AuthProvider";
 
 const dummy = [
   {
@@ -31,6 +32,8 @@ const dummy = [
 ];
 
 export default function AssignedBatch() {
+  const { auth } = useContext(AuthContext);
+
   // Fetch Batchs
   const { isLoading, error, data } = useQuery({
     queryKey: ["fetchBatch"],
@@ -61,8 +64,9 @@ export default function AssignedBatch() {
               </tr>
             </thead>
             <tbody>
-              {data?.map(
-                ({ id, batchname, techname, trainername, startdate }) => (
+              {data
+                ?.filter((val) => val.trainername == auth?.trainername)
+                .map(({ id, batchname, techname, trainername, startdate }) => (
                   <tr key={id}>
                     <td>{id}</td>
                     <td>{batchname}</td>
@@ -70,8 +74,7 @@ export default function AssignedBatch() {
                     <td>{trainername}</td>
                     <td>{startdate}</td>
                   </tr>
-                )
-              )}
+                ))}
             </tbody>
           </Table>
         </Container>

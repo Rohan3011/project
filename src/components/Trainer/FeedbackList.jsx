@@ -79,10 +79,17 @@ export default function FeedbackList() {
   );
 }
 
-const FeedbackCard = ({ communication, handson, skills, support, comment }) => {
+const FeedbackCard = ({
+  batchname,
+  communication,
+  handson,
+  skills,
+  support,
+  comment,
+}) => {
   return (
     <Card className="w-full max-w-sm max-h-96 m-2 overflow-auto">
-      <Card.Header>Feedback</Card.Header>
+      <Card.Header>{`Feedback by ${batchname} batch`}</Card.Header>
       <Card.Body>
         <Card.Title>Communication: {communication}</Card.Title>
         <Card.Title>handson: {handson}</Card.Title>

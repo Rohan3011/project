@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { Button, Container, Modal, Spinner, Table } from "react-bootstrap";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { RiAlertFill } from "react-icons/ri";
-import { Link, useLocation } from "react-router-dom";
-import { BATCH_URL } from "../../api";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { BATCH_URL, ENROLL_URL } from "../../api";
 
 // const dummy = [
 //   {
@@ -31,10 +31,43 @@ import { BATCH_URL } from "../../api";
 // ];
 
 export default function BatchList() {
+  const navigate = useNavigate();
+
+  const refreshPage = () => {
+    navigate(0);
+  };
+
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleDelete = async (id) => {
+    try {
+      setLoading(true);
+      setErrorMsg("");
+      const response = await fetch(BATCH_URL + id, {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+      });
+      console.log(response.json());
+      refreshPage();
+    } catch (error) {
+      console.log(error);
+      setErrorMsg(true);
+    } finally {
+      setLoading(false);
+      handleClose();
+    }
+  };
 
   // Fetch Batchs
   const { isLoading, error, data } = useQuery({
@@ -104,7 +137,7 @@ export default function BatchList() {
                           <Button
                             variant="primary"
                             className="bg-blue-700 hover:opacity-95"
-                            onClick={handleClose}
+                            onClick={() => handleDelete(id)}
                           >
                             Delete
                           </Button>

@@ -37,7 +37,12 @@ export default function CreateBatch() {
     queryFn: () => fetch(TRAINER_URL).then((res) => res.json()),
   });
 
-  if (error) return <Spinner />;
+  if (isLoading)
+    return (
+      <Container className="mt-20 w-full flex justify-center items-center">
+        <Spinner variant="primary" />
+      </Container>
+    );
 
   return (
     <Container
@@ -97,7 +102,7 @@ export default function CreateBatch() {
             {({ handleSubmit, handleChange, values, errors }) => (
               <Form className="space-y-2" onSubmit={handleSubmit}>
                 <Form.Group className="">
-                  <Form.Label>batchname</Form.Label>
+                  <Form.Label>Batch Name</Form.Label>
                   <Form.Control
                     type="text"
                     name="batchname"

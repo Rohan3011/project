@@ -4,7 +4,6 @@ import AuthContext from "../context/AuthProvider";
 
 export default function ProtectedRoutes({ children, userType }) {
   const { auth } = useContext(AuthContext);
-  console.log(auth);
   return auth?.userid ? (
     auth?.usertype == userType ? (
       children

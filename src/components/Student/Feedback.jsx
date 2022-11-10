@@ -9,6 +9,7 @@ import { ADD_FEEDBACK_URL, TRAINER_URL } from "../../api";
 import { useQuery } from "@tanstack/react-query";
 
 const schema = Yup.object().shape({
+  batchname: Yup.string().required("Batch name is required").max(256),
   trainername: Yup.string().required("Trainer name is required"),
   communication: Yup.number().min(1).max(5).nullable().required(),
   skills: Yup.number().min(1).max(5).nullable().required(),
@@ -27,7 +28,12 @@ export default function Feedback() {
     queryFn: () => fetch(TRAINER_URL).then((res) => res.json()),
   });
 
-  if (isLoading) return <Spinner />;
+  if (isLoading)
+    return (
+      <Container className="mt-20 w-full flex justify-center items-center">
+        <Spinner variant="primary" />
+      </Container>
+    );
 
   return (
     <Container id="feedback" className="mt-20">
@@ -74,6 +80,7 @@ export default function Feedback() {
                 }
               }}
               initialValues={{
+                batchname: "",
                 trainername: "",
                 communication: "",
                 skills: "",
@@ -105,6 +112,22 @@ export default function Feedback() {
                       {errors.trainername}
                     </Form.Control.Feedback>
                   </Form.Group>
+
+                  <Form.Group className="">
+                    <Form.Label>Batch Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="batchname"
+                      placeholder="Enter batch name"
+                      value={values.batchname}
+                      onChange={handleChange}
+                      isInvalid={!!errors.batchname}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.batchname}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
                   <Form.Group className="">
                     <Form.Label>Communication</Form.Label>
                     <Form.Control

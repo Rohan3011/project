@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button, Container, Modal, Spinner, Table } from "react-bootstrap";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { RiAlertFill } from "react-icons/ri";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const dummy = [
   {
@@ -31,6 +31,11 @@ const dummy = [
 ];
 
 export default function EnrollBatch() {
+  const navigate = useNavigate();
+
+  const refreshPage = () => {
+    navigate(0);
+  };
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -54,7 +59,7 @@ export default function EnrollBatch() {
         body: JSON.stringify(enrolldata),
       });
       console.log(response.json());
-      setSuccess(true);
+      refreshPage();
     } catch (error) {
       console.log(error);
       setErrorMsg(true);
@@ -63,8 +68,6 @@ export default function EnrollBatch() {
       handleClose();
     }
   };
-
-  if (success) return <Navigate to="/student" />;
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["enrollbatch"],
@@ -81,7 +84,7 @@ export default function EnrollBatch() {
 
   return (
     <>
-      {dummy ? (
+      {data ? (
         <Container id="batchlist" className="mt-20">
           <h1 className="text-5xl font-bold mb-8">Enroll Batch</h1>
           <Table striped bordered>
@@ -96,7 +99,7 @@ export default function EnrollBatch() {
               </tr>
             </thead>
             <tbody>
-              {dummy.map(
+              {data.map(
                 ({ id, batchname, techname, trainername, startdate }) => (
                   <tr key={id}>
                     <td>{id}</td>
@@ -133,7 +136,15 @@ export default function EnrollBatch() {
                           <Button
                             variant="primary"
                             className="bg-blue-700 hover:opacity-95"
-                            onClick={handleEnroll}
+                            onClick={() =>
+                              handleEnroll({
+                                id,
+                                batchname,
+                                techname,
+                                trainername,
+                                startdate,
+                              })
+                            }
                           >
                             Yes
                           </Button>
