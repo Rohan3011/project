@@ -47,24 +47,7 @@ export default function Login() {
         </span>
       </div>
 
-      <div>
-        <ButtonGroup className="w-full max-w-md mb-6">
-          {radios.map((radio, idx) => (
-            <ToggleButton
-              key={idx}
-              id={`radio-${idx}`}
-              type="radio"
-              name="userType"
-              variant={userType === radio.value ? "primary" : "outline-primary"}
-              value={radio.value}
-              checked={userType === radio.value}
-              onChange={(e) => setUserType(e.currentTarget.value)}
-            >
-              {radio.name}
-            </ToggleButton>
-          ))}
-        </ButtonGroup>
-      </div>
+      <div></div>
 
       {isLoading ? (
         <Spinner variant="primary" />
@@ -117,6 +100,25 @@ export default function Login() {
           >
             {({ handleSubmit, handleChange, values, errors }) => (
               <Form className="space-y-2" onSubmit={handleSubmit}>
+                <ButtonGroup className="w-full max-w-md mb-6">
+                  {radios.map((radio, idx) => (
+                    <ToggleButton
+                      key={idx}
+                      id={`radio-${idx}`}
+                      type="radio"
+                      name="userType"
+                      variant={
+                        userType === radio.value ? "primary" : "outline-primary"
+                      }
+                      value={radio.value}
+                      checked={userType === radio.value}
+                      onChange={(e) => setUserType(e.currentTarget.value)}
+                    >
+                      {radio.name}
+                    </ToggleButton>
+                  ))}
+                </ButtonGroup>
+
                 <Form.Group className="">
                   <Form.Label>UserID</Form.Label>
                   <Form.Control
