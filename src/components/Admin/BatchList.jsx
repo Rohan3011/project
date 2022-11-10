@@ -46,7 +46,8 @@ export default function BatchList() {
       const response = await fetch(BATCH_URL + id, {
         method: "DELETE",
       });
-      console.log(response.json());
+      const _temp = response.json();
+      console.log(_temp);
       refetch();
     } catch (error) {
       console.log(error);
