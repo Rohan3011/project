@@ -34,7 +34,7 @@ export default function BatchList() {
   const navigate = useNavigate();
 
   const refreshPage = () => {
-    navigate(0);
+    navigate("/admin");
   };
 
   const [show, setShow] = useState(false);

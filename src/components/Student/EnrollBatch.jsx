@@ -34,7 +34,7 @@ export default function EnrollBatch() {
   const navigate = useNavigate();
 
   const refreshPage = () => {
-    navigate(0);
+    navigate("/student");
   };
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
