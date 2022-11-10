@@ -49,22 +49,22 @@ export default function BatchList() {
   };
 
   // Fetch Batchs
-  // const { isLoading, error, data, refetch } = useQuery({
-  //   queryKey: ["fetchBatch"],
-  //   queryFn: () => fetch(BATCH_URL).then((res) => res.json()),
-  // });
+  const { isLoading, error, data, refetch } = useQuery({
+    queryKey: ["fetchBatch"],
+    queryFn: () => fetch(BATCH_URL).then((res) => res.json()),
+  });
 
-  // if (isLoading)
-  //   return (
-  //     <Container className="mt-20 w-full flex justify-center items-center">
-  //       <Spinner variant="primary" />
-  //     </Container>
-  //   );
-  // if (error) return <BatchFailed />;
+  if (isLoading)
+    return (
+      <Container className="mt-20 w-full flex justify-center items-center">
+        <Spinner variant="primary" />
+      </Container>
+    );
+  if (error) return <BatchFailed />;
 
   return (
     <>
-      {dummy ? (
+      {data ? (
         <Container id="batchlist" className="mt-20">
           <h1 className="text-5xl font-bold mb-8">Batch List</h1>
           <Table striped bordered>
@@ -79,7 +79,7 @@ export default function BatchList() {
               </tr>
             </thead>
             <tbody>
-              {dummy.map(
+              {data?.map(
                 ({ id, batchname, techname, trainername, startdate }) => (
                   <tr key={id}>
                     <td>{id}</td>
