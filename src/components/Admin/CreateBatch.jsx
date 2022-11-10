@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { useQuery } from "@tanstack/react-query";
 import { BATCH_URL, TRAINER_URL } from "../../api";
 import { BsCheckCircleFill } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const today = new Date(
   new Date().getFullYear(),
