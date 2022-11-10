@@ -12,9 +12,13 @@ export default function Admin() {
   return (
     <div>
       <Header />
-      {hash == "#createbatch" && <CreateBatch />}
-      {hash == "#batchlist" && <BatchList />}
-      {hash == "#enrolllist" && <EnrollList />}
+      {hash == "#createbatch" ? (
+        <CreateBatch />
+      ) : hash == "#enrolllist" ? (
+        <EnrollList />
+      ) : (
+        <BatchList />
+      )}
     </div>
   );
 }

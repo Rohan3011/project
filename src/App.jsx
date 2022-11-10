@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import { AuthProvider } from "./context/AuthProvider";
 import Temp from "./pages/temp";
 import Admin from "./pages/Admin";
+import Trainer from "./pages/Trainer";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: <Admin />,
+  },
+  {
+    path: "/trainer",
+    element: <Trainer />,
   },
 ]);
 const queryClient = new QueryClient();
