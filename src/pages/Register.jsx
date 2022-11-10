@@ -20,7 +20,7 @@ const schema = Yup.object().shape({
     .max(255)
     .required("Email is required"),
   password: Yup.string().max(255).required("Password is required"),
-  mobile: Yup.string().required().min(10).max(10),
+  mobile: Yup.number().required().min(10).max(10),
   techname: Yup.string().optional(),
 });
 
