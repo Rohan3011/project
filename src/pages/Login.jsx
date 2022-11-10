@@ -1,8 +1,14 @@
-import React, { useContext, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Button,
+  ButtonGroup,
+  Form,
+  Spinner,
+  ToggleButton,
+} from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
 
 const schema = Yup.object().shape({
@@ -10,11 +16,24 @@ const schema = Yup.object().shape({
   password: Yup.string().max(255).required("Password is required"),
 });
 
-const LOGIN_URL = "http://localhost:8081/api/users/login";
+// const LOGIN_URL = "http://localhost:8081/api/users/login";
 
 export default function Login() {
   const { setAuth } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [userType, setUserType] = useState("student");
+
+  const radios = [
+    { name: "Student", value: "student" },
+    { name: "Trainer", value: "trainer" },
+    { name: "Admin", value: "admin" },
+  ];
+
+  useEffect(() => {
+    if (success) return redirect(`/${userType}`);
+  }, [success]);
 
   return (
     <div className="w-full h-full flex flex-col items-center">
@@ -27,85 +46,124 @@ export default function Login() {
           </Link>
         </span>
       </div>
-      <div className="w-full max-w-md bg-white p-4 border rounded-md">
-        <Formik
-          validationSchema={schema}
-          onSubmit={async (values) => {
-            try {
-              setErrorMsg("");
-              const response = await fetch(LOGIN_URL, {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                redirect: "follow",
-                referrerPolicy: "no-referrer",
-                body: JSON.stringify({
-                  userid: values.userId,
-                  password: values.password,
-                }),
-              });
-              console.log(response.json());
-              setAuth(values);
-            } catch (error) {
-              console.log(error);
-              setErrorMsg("Login Failed!");
-            }
-          }}
-          initialValues={{
-            userId: "",
-            password: "",
-          }}
-        >
-          {({ handleSubmit, handleChange, values, errors }) => (
-            <Form className="space-y-2" onSubmit={handleSubmit}>
-              <Form.Group className="">
-                <Form.Label>UserID</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="userId"
-                  placeholder="Enter UserID"
-                  value={values.userId}
-                  onChange={handleChange}
-                  isInvalid={!!errors.userId}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.userId}
-                </Form.Control.Feedback>
-              </Form.Group>
 
-              <Form.Group className="">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="password"
-                  placeholder="Enter mobile Password"
-                  value={values.password}
-                  onChange={handleChange}
-                  isInvalid={!!errors.password}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.password}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mt-3">
-                <Button
-                  className="w-full bg-blue-700 hover:opacity-95"
-                  type="submit"
-                >
-                  Login
-                </Button>
-              </Form.Group>
-              {errorMsg && (
-                <div>
-                  <span className="text-red-700 text-sm">{errorMsg}</span>
-                </div>
-              )}
-            </Form>
-          )}
-        </Formik>
+      <div>
+        <ButtonGroup className="w-full max-w-md mb-6">
+          {radios.map((radio, idx) => (
+            <ToggleButton
+              key={idx}
+              id={`radio-${idx}`}
+              type="radio"
+              name="userType"
+              variant={userType === radio.value ? "primary" : "outline-primary"}
+              value={radio.value}
+              checked={userType === radio.value}
+              onChange={(e) => setUserType(e.currentTarget.value)}
+            >
+              {radio.name}
+            </ToggleButton>
+          ))}
+        </ButtonGroup>
       </div>
+
+      {isLoading ? (
+        <Spinner variant="primary" />
+      ) : (
+        <div className="w-full max-w-md bg-white p-4 border rounded-md">
+          <Formik
+            validationSchema={schema}
+            onSubmit={async (values) => {
+              try {
+                setIsLoading(true);
+                setErrorMsg("");
+                const response = await fetch(
+                  `http://localhost:8081/api/${userType}/login`,
+                  {
+                    method: "POST",
+                    mode: "cors",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    redirect: "follow",
+                    referrerPolicy: "no-referrer",
+                    body: JSON.stringify({
+                      userid: values.userId,
+                      password: values.password,
+                      usertype: userType,
+                    }),
+                  }
+                );
+                console.log(response.json());
+                setAuth(values);
+                setSuccess(true);
+              } catch (err) {
+                if (!err?.response) {
+                  setErrorMsg("No Server Response");
+                } else if (err.response?.status == 400) {
+                  setErrorMsg("Missing UserId or Password");
+                } else if (err.response?.status == 401) {
+                  setErrorMsg("Unauthorized");
+                } else {
+                  setErrorMsg("Login Failed!");
+                }
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+            initialValues={{
+              userId: "",
+              password: "",
+            }}
+          >
+            {({ handleSubmit, handleChange, values, errors }) => (
+              <Form className="space-y-2" onSubmit={handleSubmit}>
+                <Form.Group className="">
+                  <Form.Label>UserID</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="userId"
+                    placeholder="Enter UserID"
+                    value={values.userId}
+                    onChange={handleChange}
+                    isInvalid={!!errors.userId}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.userId}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    placeholder="Enter mobile Password"
+                    value={values.password}
+                    onChange={handleChange}
+                    isInvalid={!!errors.password}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mt-3">
+                  <Button
+                    className="w-full bg-blue-700 hover:opacity-95"
+                    type="submit"
+                  >
+                    Login
+                  </Button>
+                </Form.Group>
+                {errorMsg && (
+                  <div>
+                    <span className="text-red-700 text-sm">{errorMsg}</span>
+                  </div>
+                )}
+              </Form>
+            )}
+          </Formik>
+        </div>
+      )}
     </div>
   );
 }
