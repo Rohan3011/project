@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import React, { useState } from "react";
 import { Button, Container, Modal, Spinner, Table } from "react-bootstrap";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -40,22 +41,10 @@ export default function BatchList() {
   const handleShow = () => setShow(true);
 
   const handleDelete = async (id) => {
-    try {
-      setLoading(true);
-      setErrorMsg("");
-      const response = await fetch(BATCH_URL + id, {
-        method: "DELETE",
-      });
-      const _temp = response.json();
-      console.log(_temp);
-      refetch();
-    } catch (error) {
-      console.log(error);
-      setErrorMsg(true);
-    } finally {
-      setLoading(false);
-      handleClose();
-    }
+    axios
+      .delete(`http://localhost:8081/api/batch/${id}`)
+      .then(() => refetch())
+      .catch((err) => setErrorMsg(err));
   };
 
   // Fetch Batchs
