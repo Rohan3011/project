@@ -72,7 +72,7 @@ export default function Login() {
                     }),
                   }
                 );
-                const data = response.json();
+                const data = await response.json();
                 console.log(data);
                 setAuth({
                   userid: values.userId,
