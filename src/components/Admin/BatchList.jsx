@@ -33,10 +33,6 @@ import { BATCH_URL, ENROLL_URL } from "../../api";
 export default function BatchList() {
   const navigate = useNavigate();
 
-  const refreshPage = () => {
-    navigate("/admin");
-  };
-
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -51,12 +47,6 @@ export default function BatchList() {
       setErrorMsg("");
       const response = await fetch(BATCH_URL + id, {
         method: "DELETE",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        redirect: "follow",
-        referrerPolicy: "no-referrer",
       });
       console.log(response.json());
       refreshPage();
