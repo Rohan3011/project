@@ -25,10 +25,10 @@ const dummy = [
   },
 ];
 
-export default function BatchList() {
+export default function AssignedBatch() {
   return (
     <Container id="batchlist" className="mt-20">
-      <h1 className="text-5xl font-bold mb-8">Batch List</h1>
+      <h1 className="text-5xl font-bold mb-8">Assigned Batch</h1>
       <Table striped bordered>
         <thead>
           <tr>

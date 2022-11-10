@@ -79,14 +79,14 @@ export default function EnrollBatch() {
                         className="bg-gray-700 hover:opacity-95"
                         onClick={handleClose}
                       >
-                        Close
+                        No
                       </Button>
                       <Button
                         variant="primary"
                         className="bg-blue-700 hover:opacity-95"
                         onClick={handleClose}
                       >
-                        Save Changes
+                        Yes
                       </Button>
                     </Modal.Footer>
                   </Modal>

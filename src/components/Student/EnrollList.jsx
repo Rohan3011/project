@@ -6,6 +6,7 @@ const dummy = [
   {
     id: 1,
     studentname: "student1",
+    batchname: "b1",
     technology: "java",
     trainername: "Xyz",
     startdate: new Date().toDateString(),
@@ -13,6 +14,7 @@ const dummy = [
   {
     id: 2,
     studentname: "student2",
+    batchname: "b1",
     technology: "java",
     trainername: "Xyz",
     startdate: new Date().toDateString(),
@@ -20,6 +22,7 @@ const dummy = [
   {
     id: 3,
     studentname: "student3",
+    batchname: "b1",
     technology: "java",
     trainername: "Xyz",
     startdate: new Date().toDateString(),
@@ -35,6 +38,7 @@ export default function EnrollList() {
           <tr>
             <th>Id</th>
             <th>Student Name</th>
+            <th>Batch Name</th>
             <th>Technology</th>
             <th>Trainer Name</th>
             <th>Start Date</th>
@@ -42,10 +46,18 @@ export default function EnrollList() {
         </thead>
         <tbody>
           {dummy.map(
-            ({ id, studentname, technology, trainername, startdate }) => (
+            ({
+              id,
+              studentname,
+              batchname,
+              technology,
+              trainername,
+              startdate,
+            }) => (
               <tr key={id}>
                 <td>{id}</td>
                 <td>{studentname}</td>
+                <td>{batchname}</td>
                 <td>{technology}</td>
                 <td>{trainername}</td>
                 <td>{startdate}</td>
