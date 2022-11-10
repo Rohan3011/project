@@ -16,6 +16,7 @@ const oneYear = new Date();
 oneYear.setFullYear(oneYear.getFullYear() + 1);
 
 const schema = Yup.object().shape({
+  batchname: Yup.string().required("Batch name is required").max(256),
   startdate: Yup.date()
     .nullable()
     .min(today, `Start Date must be later than Today`)
@@ -71,6 +72,7 @@ export default function CreateBatch() {
                   redirect: "follow",
                   referrerPolicy: "no-referrer",
                   body: JSON.stringify({
+                    batchname: values.batchname,
                     startdate: values.startdate,
                     trainername: values.trainername,
                     techname: values.technology,
@@ -86,6 +88,7 @@ export default function CreateBatch() {
               }
             }}
             initialValues={{
+              batchname: "",
               startdate: null,
               trainername: "",
               technology: "",
@@ -93,6 +96,21 @@ export default function CreateBatch() {
           >
             {({ handleSubmit, handleChange, values, errors }) => (
               <Form className="space-y-2" onSubmit={handleSubmit}>
+                <Form.Group className="">
+                  <Form.Label>batchname</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="batchname"
+                    placeholder="Enter batch name"
+                    value={values.batchname}
+                    onChange={handleChange}
+                    isInvalid={!!errors.batchname}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.batchname}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
                 <Form.Group className="">
                   <Form.Label>Start Date</Form.Label>
                   <Form.Control
