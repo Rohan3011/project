@@ -12,9 +12,6 @@ import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import { BsCheckCircleFill } from "react-icons/bs";
 
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
 const schema = Yup.object().shape({
   name: Yup.string().required(),
   userId: Yup.string().required(),
@@ -23,9 +20,7 @@ const schema = Yup.object().shape({
     .max(255)
     .required("Email is required"),
   password: Yup.string().max(255).required("Password is required"),
-  mobile: Yup.string()
-    .required()
-    .matches(phoneRegExp, "Phone number is not valid"),
+  mobile: Yup.string().required().min(10).max(10),
   techname: Yup.string().optional(),
 });
 
