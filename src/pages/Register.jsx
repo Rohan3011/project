@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Button,
   ButtonGroup,
+  Container,
   Form,
   Spinner,
   ToggleButton,
@@ -42,7 +43,7 @@ export default function Register() {
   ];
 
   return (
-    <div className="w-full h-full flex flex-col items-center">
+    <Container className="w-full h-full flex flex-col items-center">
       <div className=" pt-8 pb-10">
         <h1 className="text-5xl font-bold text-center mb-3">Register</h1>
         <span className="text-sm font-semibold">
@@ -241,13 +242,13 @@ export default function Register() {
           </Formik>
         </div>
       )}
-    </div>
+    </Container>
   );
 }
 
 function RegisterdSuccess() {
   return (
-    <div className="w-full h-full ">
+    <div className="w-full h-full bg-blue-50 rounded shadow">
       <div className=" pt-8 pb-10 flex flex-col gap-6  items-center">
         <BsCheckCircleFill className="text-5xl text-green-700" />
         <h1 className="text-5xl font-bold text-center mb-3">

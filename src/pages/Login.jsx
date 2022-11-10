@@ -8,7 +8,7 @@ import {
 } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Link, redirect } from "react-router-dom";
+import { Link, Navigate, redirect } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
 
 const schema = Yup.object().shape({
@@ -31,9 +31,7 @@ export default function Login() {
     { name: "Admin", value: "admin" },
   ];
 
-  useEffect(() => {
-    if (success) return redirect(`/${userType}`);
-  }, [success]);
+  if (success) return <Navigate to={`/${userType}`} />;
 
   return (
     <div className="w-full h-full flex flex-col items-center">
@@ -77,7 +75,11 @@ export default function Login() {
                   }
                 );
                 console.log(response.json());
-                setAuth({ ...values, userType: userType });
+                setAuth({
+                  userid: values.userId,
+                  password: values.password,
+                  usertype: userType,
+                });
                 setSuccess(true);
               } catch (err) {
                 if (!err?.response) {

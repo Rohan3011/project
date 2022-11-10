@@ -23,34 +23,21 @@ const schema = Yup.object().shape({
   technology: Yup.string().required("Technology is required"),
 });
 
-const TRAINER_URL = "http://localhost:8081/api/users";
-
-const options = [
-  { value: 1, label: "One" },
-  { value: 2, label: "Two" },
-  { value: 3, label: "Three" },
-];
-const techOptions = [
-  { value: "java", label: "Java" },
-  { value: "python", label: "Python" },
-  { value: "c++", label: "C++" },
-];
+const TRAINER_URL = "http://localhost:8081/api/trainer/";
+const BATCH_URL = "http://localhost:8081/api/batch/";
 
 export default function CreateBatch() {
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Fetch Trainers
-  // const { isLoading, error, data } = useQuery({
-  //   queryKey: ["fetchTrainer"],
-  //   queryFn: () =>
-  //     fetch(TRAINER_URL)
-  //       .then((res) => res.json())
-  //       .then((data) => data.filter((val) => val?.usertype == "2")),
-  // });
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["fetchTrainer"],
+    queryFn: () => fetch(TRAINER_URL).then((res) => res.json()),
+  });
 
-  // if (isLoading) return <Spinner />;
-  // if (error) console.error(error);
-  // console.log(data);
+  if (isLoading) return <Spinner />;
 
   return (
     <Container
@@ -59,121 +46,149 @@ export default function CreateBatch() {
     >
       {errorMsg && (
         <Alert className="w-full" variant="danger">
-          Create Batch Failed! Please Try again
+          Create Batch Failed! Please try again
         </Alert>
       )}
 
       <h1 className="text-5xl font-bold mb-8">Create New Batch</h1>
+      {loading ? (
+        <Spinner variant="primary" />
+      ) : success ? (
+        <BactchSuccess />
+      ) : (
+        <div className="w-full max-w-md bg-white p-4 border rounded-md">
+          <Formik
+            validationSchema={schema}
+            onSubmit={async (values) => {
+              try {
+                setLoading(true);
+                setErrorMsg("");
+                const response = await fetch(BATCH_URL, {
+                  method: "POST",
+                  mode: "cors",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  redirect: "follow",
+                  referrerPolicy: "no-referrer",
+                  body: JSON.stringify({
+                    startdate: values.startdate,
+                    trainername: values.trainername,
+                    techname: values.technology,
+                  }),
+                });
+                console.log(response.json());
+                setSuccess(true);
+              } catch (error) {
+                console.log(error);
+                setErrorMsg(true);
+              } finally {
+                setLoading(false);
+              }
+            }}
+            initialValues={{
+              startdate: null,
+              trainername: "",
+              technology: "",
+            }}
+          >
+            {({ handleSubmit, handleChange, values, errors }) => (
+              <Form className="space-y-2" onSubmit={handleSubmit}>
+                <Form.Group className="">
+                  <Form.Label>Start Date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="startdate"
+                    value={values.startdate}
+                    onChange={handleChange}
+                    isInvalid={!!errors.startdate}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.startdate}
+                  </Form.Control.Feedback>
+                </Form.Group>
 
-      <div className="w-full max-w-md bg-white p-4 border rounded-md">
-        <Formik
-          validationSchema={schema}
-          onSubmit={async (values) => {
-            // try {
-            //   setErrorMsg("");
-            //   const response = await fetch(LOGIN_URL, {
-            //     method: "POST",
-            //     mode: "cors",
-            //     headers: {
-            //       "Content-Type": "application/json",
-            //     },
-            //     redirect: "follow",
-            //     referrerPolicy: "no-referrer",
-            //     body: JSON.stringify({
-            //       userid: values.userId,
-            //       password: values.password,
-            //     }),
-            //   });
-            //   console.log(response.json());
-            // } catch (error) {
-            //   console.log(error);
-            //   setErrorMsg("Login Failed!");
-            // }
-            console.log(values);
-          }}
-          initialValues={{
-            startdate: null,
-            trainername: "",
-            technology: "",
-          }}
-        >
-          {({ handleSubmit, handleChange, values, errors }) => (
-            <Form className="space-y-2" onSubmit={handleSubmit}>
-              <Form.Group className="">
-                <Form.Label>Start Date</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="startdate"
-                  value={values.startdate}
-                  onChange={handleChange}
-                  isInvalid={!!errors.startdate}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.startdate}
-                </Form.Control.Feedback>
-              </Form.Group>
+                <Form.Group className="">
+                  <Form.Label>Trainer Name</Form.Label>
 
-              <Form.Group className="">
-                <Form.Label>Trainer Name</Form.Label>
+                  <Form.Select
+                    name="trainername"
+                    value={values.trainername}
+                    onChange={handleChange}
+                    isInvalid={!!errors.trainername}
+                    aria-label="select trainer name"
+                  >
+                    <option value={""}>select trainer</option>
+                    {data?.map((val) => (
+                      <option key={val?.id} value={val?.trainername}>
+                        {val?.trainername}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.trainername}
+                  </Form.Control.Feedback>
+                </Form.Group>
 
-                <Form.Select
-                  name="trainername"
-                  value={values.trainername}
-                  onChange={handleChange}
-                  isInvalid={!!errors.trainername}
-                  aria-label="select trainer name"
-                >
-                  <option value={""}>select trainer</option>
-                  {options.map(({ value, label }) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  {errors.trainername}
-                </Form.Control.Feedback>
-              </Form.Group>
+                <Form.Group className="">
+                  <Form.Label>Technology</Form.Label>
 
-              <Form.Group className="">
-                <Form.Label>Technology</Form.Label>
+                  <Form.Select
+                    name="technology"
+                    value={values.technology}
+                    onChange={handleChange}
+                    isInvalid={!!errors.technology}
+                    aria-label="select technology name"
+                  >
+                    <option value={""}>select technology</option>
+                    {data?.map((val) => (
+                      <option key={val?.id} value={val?.techname}>
+                        {val?.techname}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.technology}
+                  </Form.Control.Feedback>
+                </Form.Group>
 
-                <Form.Select
-                  name="technology"
-                  value={values.technology}
-                  onChange={handleChange}
-                  isInvalid={!!errors.technology}
-                  aria-label="select technology name"
-                >
-                  <option value={""}>select technology</option>
-                  {techOptions.map(({ value, label }) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  {errors.technology}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="mt-3">
-                <Button
-                  className="w-full bg-blue-700 hover:opacity-95"
-                  type="submit"
-                >
-                  Submit
-                </Button>
-              </Form.Group>
-              {errorMsg && (
-                <div>
-                  <span className="text-red-600 text-sm">{errorMsg}</span>
-                </div>
-              )}
-            </Form>
-          )}
-        </Formik>
-      </div>
+                <Form.Group className="mt-3">
+                  <Button
+                    className="w-full bg-blue-700 hover:opacity-95"
+                    type="submit"
+                  >
+                    Submit
+                  </Button>
+                </Form.Group>
+                {errorMsg && (
+                  <div>
+                    <span className="text-red-600 text-sm">{errorMsg}</span>
+                  </div>
+                )}
+              </Form>
+            )}
+          </Formik>
+        </div>
+      )}
     </Container>
+  );
+}
+
+function BactchSuccess() {
+  return (
+    <div className="w-full h-full bg-blue-50 rounded shadow">
+      <div className=" pt-8 pb-10 flex flex-col gap-6  items-center">
+        <BsCheckCircleFill className="text-5xl text-green-700" />
+        <h1 className="text-5xl font-bold text-center mb-3">
+          Batch Created Successfully!
+        </h1>
+        <span className="text-lg text-center font-semibold">
+          Go back{" "}
+          <Link className="text-blue-700 underline " to={"/admin"}>
+            Dashboard
+          </Link>{" "}
+        </span>
+      </div>
+    </div>
   );
 }
