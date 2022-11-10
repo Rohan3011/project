@@ -12,9 +12,6 @@ import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import { BsCheckCircleFill } from "react-icons/bs";
 
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
 const schema = Yup.object().shape({
   name: Yup.string().required(),
   userId: Yup.string().required(),
@@ -23,9 +20,6 @@ const schema = Yup.object().shape({
     .max(255)
     .required("Email is required"),
   password: Yup.string().max(255).required("Password is required"),
-  mobile: Yup.string()
-    .required()
-    .matches(phoneRegExp, "Phone number is not valid"),
   techname: Yup.string().optional(),
 });
 
@@ -78,7 +72,6 @@ export default function Register() {
                       moblie: values.mobile,
                       techname: values.techname,
                     };
-
               try {
                 setIsLoading(true);
                 setErrorMsg("");
@@ -114,7 +107,6 @@ export default function Register() {
             initialValues={{
               name: "",
               email: "",
-              mobile: "",
               userId: "",
               password: "",
               userType: "",
@@ -171,22 +163,6 @@ export default function Register() {
                     {errors.email}
                   </Form.Control.Feedback>
                 </Form.Group>
-
-                <Form.Group className="">
-                  <Form.Label>Mobile Number</Form.Label>
-                  <Form.Control
-                    type="tel"
-                    name="mobile"
-                    placeholder="Enter mobile number"
-                    value={values.mobile}
-                    onChange={handleChange}
-                    isInvalid={!!errors.mobile}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.mobile}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
                 <Form.Group className="">
                   <Form.Label>UserID</Form.Label>
                   <Form.Control
