@@ -7,29 +7,29 @@ import { RiAlertFill } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BATCH_URL, ENROLL_URL } from "../../api";
 
-// const dummy = [
-//   {
-//     id: 1,
-//     batchname: "b1",
-//     technology: "java",
-//     trainername: "Xyz",
-//     startdate: new Date().toDateString(),
-//   },
-//   {
-//     id: 2,
-//     batchname: "b1",
-//     technology: "java",
-//     trainername: "Xyz",
-//     startdate: new Date().toDateString(),
-//   },
-//   {
-//     id: 3,
-//     batchname: "b1",
-//     technology: "java",
-//     trainername: "Xyz",
-//     startdate: new Date().toDateString(),
-//   },
-// ];
+const dummy = [
+  {
+    id: 1,
+    batchname: "b1",
+    techname: "java",
+    trainername: "Xyz",
+    startdate: new Date().toDateString(),
+  },
+  {
+    id: 2,
+    batchname: "b2",
+    techname: "java",
+    trainername: "Xyz",
+    startdate: new Date().toDateString(),
+  },
+  {
+    id: 3,
+    batchname: "b3",
+    techname: "java",
+    trainername: "Xyz",
+    startdate: new Date().toDateString(),
+  },
+];
 
 export default function BatchList() {
   const [show, setShow] = useState(false);
@@ -48,22 +48,22 @@ export default function BatchList() {
   };
 
   // Fetch Batchs
-  const { isLoading, error, data, refetch } = useQuery({
-    queryKey: ["fetchBatch"],
-    queryFn: () => fetch(BATCH_URL).then((res) => res.json()),
-  });
+  // const { isLoading, error, data, refetch } = useQuery({
+  //   queryKey: ["fetchBatch"],
+  //   queryFn: () => fetch(BATCH_URL).then((res) => res.json()),
+  // });
 
-  if (isLoading)
-    return (
-      <Container className="mt-20 w-full flex justify-center items-center">
-        <Spinner variant="primary" />
-      </Container>
-    );
-  if (error) return <BatchFailed />;
+  // if (isLoading)
+  //   return (
+  //     <Container className="mt-20 w-full flex justify-center items-center">
+  //       <Spinner variant="primary" />
+  //     </Container>
+  //   );
+  // if (error) return <BatchFailed />;
 
   return (
     <>
-      {data ? (
+      {dummy ? (
         <Container id="batchlist" className="mt-20">
           <h1 className="text-5xl font-bold mb-8">Batch List</h1>
           <Table striped bordered>
@@ -78,7 +78,7 @@ export default function BatchList() {
               </tr>
             </thead>
             <tbody>
-              {data.map(
+              {dummy.map(
                 ({ id, batchname, techname, trainername, startdate }) => (
                   <tr key={id}>
                     <td>{id}</td>
@@ -91,36 +91,10 @@ export default function BatchList() {
                         variant="danger"
                         size="sm"
                         className="bg-red-600 hover:opacity-95"
-                        onClick={handleShow}
+                        onClick={() => handleDelete(id)}
                       >
                         Delete
                       </Button>
-
-                      <Modal show={show} onHide={handleClose}>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Confirm</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          Are you're sure to delete batch{" "}
-                          <span>{batchname}</span> ?
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button
-                            variant="secondary"
-                            className="bg-gray-700 hover:opacity-95"
-                            onClick={handleClose}
-                          >
-                            Close
-                          </Button>
-                          <Button
-                            variant="primary"
-                            className="bg-blue-700 hover:opacity-95"
-                            onClick={() => handleDelete(id)}
-                          >
-                            Delete
-                          </Button>
-                        </Modal.Footer>
-                      </Modal>
                     </td>
                   </tr>
                 )
