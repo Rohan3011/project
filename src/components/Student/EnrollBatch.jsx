@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ADD_ENROLL_URL, ENROLL_URL } from "../../api";
+import { ADD_ENROLL_URL, BATCH_URL, ENROLL_URL } from "../../api";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Container, Modal, Spinner, Table } from "react-bootstrap";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -71,7 +71,7 @@ export default function EnrollBatch() {
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["enrollbatch"],
-    queryFn: () => fetch(ENROLL_URL).then((res) => res.json()),
+    queryFn: () => fetch(BATCH_URL).then((res) => res.json()),
   });
 
   if (isLoading)
