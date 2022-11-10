@@ -60,6 +60,25 @@ export default function Register() {
           <Formik
             validationSchema={schema}
             onSubmit={async (values) => {
+              const data =
+                userType == "student"
+                  ? {
+                      userid: values.userId,
+                      password: values.password,
+                      studentname: values.name,
+                      email: values.email,
+                      moblie: values.mobile,
+                      techname: values.techname,
+                    }
+                  : {
+                      userid: values.userId,
+                      password: values.password,
+                      trainername: values.name,
+                      email: values.email,
+                      moblie: values.mobile,
+                      techname: values.techname,
+                    };
+
               try {
                 setIsLoading(true);
                 setErrorMsg("");
@@ -73,15 +92,7 @@ export default function Register() {
                     },
                     redirect: "follow",
                     referrerPolicy: "no-referrer",
-                    body: JSON.stringify({
-                      userid: values.userId,
-                      password: values.password,
-                      name: values.name,
-                      email: values.email,
-                      moblie: values.mobile,
-                      usertype: userType,
-                      techname: values.techname,
-                    }),
+                    body: JSON.stringify(data),
                   }
                 );
                 console.log(response.json());
