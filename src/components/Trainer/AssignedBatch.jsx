@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { Container, Spinner, Table } from "react-bootstrap";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { RiAlertFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { BATCH_URL } from "../../api";
 
@@ -45,31 +46,39 @@ export default function AssignedBatch() {
   if (error) return <BatchFailed />;
 
   return (
-    <Container id="batchlist" className="mt-20">
-      <h1 className="text-5xl font-bold mb-8">Assigned Batch</h1>
-      <Table striped bordered>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Batch Name</th>
-            <th>Technology</th>
-            <th>Trainer Name</th>
-            <th>Start Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.map(({ id, batchname, techname, trainername, startdate }) => (
-            <tr key={id}>
-              <td>{id}</td>
-              <td>{batchname}</td>
-              <td>{techname}</td>
-              <td>{trainername}</td>
-              <td>{startdate}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    </Container>
+    <>
+      {data ? (
+        <Container id="batchlist" className="mt-20">
+          <h1 className="text-5xl font-bold mb-8">Assigned Batch</h1>
+          <Table striped bordered>
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Batch Name</th>
+                <th>Technology</th>
+                <th>Trainer Name</th>
+                <th>Start Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data?.map(
+                ({ id, batchname, techname, trainername, startdate }) => (
+                  <tr key={id}>
+                    <td>{id}</td>
+                    <td>{batchname}</td>
+                    <td>{techname}</td>
+                    <td>{trainername}</td>
+                    <td>{startdate}</td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </Table>
+        </Container>
+      ) : (
+        <BatchEmpty />
+      )}
+    </>
   );
 }
 
@@ -87,6 +96,19 @@ function BatchFailed() {
             refresh
           </Link>{" "}
         </span>
+      </div>
+    </Container>
+  );
+}
+
+function BatchEmpty() {
+  return (
+    <Container className="w-full h-full mt-20 bg-yellow-50 rounded shadow">
+      <div className=" pt-8 pb-10 flex flex-col gap-6  items-center">
+        <RiAlertFill className="text-5xl text-yellow-700" />
+        <h1 className="text-5xl font-bold text-center mb-3">
+          Batch List is Emtpy!
+        </h1>
       </div>
     </Container>
   );

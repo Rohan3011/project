@@ -3,7 +3,7 @@ import { Alert, Button, Container, Form, Spinner } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useQuery } from "@tanstack/react-query";
-import { TRAINER_URL } from "../../api";
+import { BATCH_URL, TRAINER_URL } from "../../api";
 
 const today = new Date(
   new Date().getFullYear(),
@@ -27,7 +27,7 @@ const schema = Yup.object().shape({
 export default function CreateBatch() {
   const [errorMsg, setErrorMsg] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // Fetch Trainers
   const { isLoading, error, data } = useQuery({
@@ -35,7 +35,7 @@ export default function CreateBatch() {
     queryFn: () => fetch(TRAINER_URL).then((res) => res.json()),
   });
 
-  if (isLoading) return <Spinner />;
+  if (error) return <Spinner />;
 
   return (
     <Container

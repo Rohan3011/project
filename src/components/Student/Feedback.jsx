@@ -5,6 +5,8 @@ import * as Yup from "yup";
 import { MdOutlineFeedback } from "react-icons/md";
 import { BsCheckCircleFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { ADD_FEEDBACK_URL, TRAINER_URL } from "../../api";
+import { useQuery } from "@tanstack/react-query";
 
 const schema = Yup.object().shape({
   trainername: Yup.string().required("Trainer name is required"),
@@ -16,15 +18,16 @@ const schema = Yup.object().shape({
 });
 
 export default function Feedback() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setloading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [success, setSuccess] = useState(false);
+  // Fetch Trainers
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["fetchTrainer"],
+    queryFn: () => fetch(TRAINER_URL).then((res) => res.json()),
+  });
 
-  const options = [
-    { value: 1, label: "One" },
-    { value: 2, label: "Two" },
-    { value: 3, label: "Three" },
-  ];
+  if (isLoading) return <Spinner />;
 
   return (
     <Container id="feedback" className="mt-20">
@@ -33,7 +36,7 @@ export default function Feedback() {
         <h1 className="text-5xl font-bold mb-8 text-center">Feedback</h1>
       </div>
       <div className="w-full h-full flex flex-col items-center">
-        {isLoading ? (
+        {loading ? (
           <Spinner variant="primary" />
         ) : success ? (
           <FeedbackSuccess />
@@ -43,26 +46,18 @@ export default function Feedback() {
               validationSchema={schema}
               onSubmit={async (values) => {
                 try {
-                  setIsLoading(true);
+                  setloading(true);
                   setErrorMsg("");
-                  // const response = await fetch(
-                  //   `http://localhost:8081/api/${userType}/login`,
-                  //   {
-                  //     method: "POST",
-                  //     mode: "cors",
-                  //     headers: {
-                  //       "Content-Type": "application/json",
-                  //     },
-                  //     redirect: "follow",
-                  //     referrerPolicy: "no-referrer",
-                  //     body: JSON.stringify({
-                  //       userid: values.userId,
-                  //       password: values.password,
-                  //       usertype: userType,
-                  //     }),
-                  //   }
-                  // );
-                  console.log(values);
+                  const response = await fetch(ADD_FEEDBACK_URL, {
+                    method: "POST",
+                    mode: "cors",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    redirect: "follow",
+                    referrerPolicy: "no-referrer",
+                    body: JSON.stringify(values),
+                  });
                   setSuccess(true);
                 } catch (err) {
                   if (!err?.response) {
@@ -75,7 +70,7 @@ export default function Feedback() {
                     setErrorMsg("Login Failed!");
                   }
                 } finally {
-                  setIsLoading(false);
+                  setloading(false);
                 }
               }}
               initialValues={{
@@ -100,9 +95,9 @@ export default function Feedback() {
                       aria-label="select trainer name"
                     >
                       <option value={""}>select trainer</option>
-                      {options.map(({ value, label }) => (
-                        <option key={value} value={value}>
-                          {label}
+                      {data?.map((val) => (
+                        <option key={val?.id} value={val?.trainername}>
+                          {val?.trainername}
                         </option>
                       ))}
                     </Form.Select>
