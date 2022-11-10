@@ -40,9 +40,10 @@ export default function BatchList() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const handleDelete = async (id) => {
-    axios
-      .delete(`http://localhost:8081/api/batch/${id}`)
+  const handleDelete = (id) => {
+    fetch(BATCH_URL + id, {
+      method: "DELETE",
+    })
       .then(() => refetch())
       .catch((err) => setErrorMsg(err));
   };
