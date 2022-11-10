@@ -10,10 +10,10 @@ export default function Trainer() {
 
   return (
     <>
-      {/* <ProtectedRoutes userType={"trainer"}> */}
-      <Header />
-      {hash == "#feedback" ? <FeedbackList /> : <AssignedBatch />}
-      {/* </ProtectedRoutes> */}
+      <ProtectedRoutes userType={"trainer"}>
+        <Header />
+        {hash == "#feedback" ? <FeedbackList /> : <AssignedBatch />}
+      </ProtectedRoutes>
     </>
   );
 }

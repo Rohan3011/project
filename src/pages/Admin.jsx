@@ -12,16 +12,16 @@ export default function Admin() {
 
   return (
     <>
-      {/* <ProtectedRoutes userType={"admin"}> */}
-      <Header />
-      {hash == "#createbatch" ? (
-        <CreateBatch />
-      ) : hash == "#enrolllist" ? (
-        <EnrollList />
-      ) : (
-        <BatchList />
-      )}
-      {/* </ProtectedRoutes> */}
+      <ProtectedRoutes userType={"admin"}>
+        <Header />
+        {hash == "#createbatch" ? (
+          <CreateBatch />
+        ) : hash == "#enrolllist" ? (
+          <EnrollList />
+        ) : (
+          <BatchList />
+        )}
+      </ProtectedRoutes>
     </>
   );
 }
