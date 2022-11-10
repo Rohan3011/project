@@ -38,7 +38,6 @@ export default function EnrollBatch() {
   const [success, setSuccess] = useState(false);
   const { auth } = useContext(AuthContext);
 
-  con;
   const handleEnroll = async (val) => {
     try {
       setLoading(true);
