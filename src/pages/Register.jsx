@@ -68,10 +68,9 @@ export default function Register() {
                 }),
               });
               console.log(response.json());
-              setAuth(values);
             } catch (error) {
               console.log(error);
-              setErrorMsg("Login Failed!");
+              setErrorMsg("Register Failed! Please try again");
             }
           }}
           initialValues={{
