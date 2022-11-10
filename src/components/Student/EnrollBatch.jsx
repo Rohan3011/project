@@ -38,9 +38,7 @@ export default function EnrollBatch() {
   const [success, setSuccess] = useState(false);
   const { auth } = useContext(AuthContext);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+  con;
   const handleEnroll = async (val) => {
     try {
       setLoading(true);
@@ -61,15 +59,12 @@ export default function EnrollBatch() {
           studentname: auth?.studentname,
         }),
       });
-      const d = await response.json();
-      console.log(d);
       refetch();
     } catch (error) {
       console.log(error);
       setErrorMsg(true);
     } finally {
       setLoading(false);
-      handleClose();
     }
   };
 
@@ -116,44 +111,18 @@ export default function EnrollBatch() {
                         variant="success"
                         size="sm"
                         className="bg-green-700 hover:opacity-95"
-                        onClick={handleShow}
+                        onClick={() =>
+                          handleEnroll({
+                            id,
+                            batchname,
+                            techname,
+                            trainername,
+                            startdate,
+                          })
+                        }
                       >
                         Enroll
                       </Button>
-
-                      <Modal show={show} onHide={handleClose}>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Confrim Enrollment</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          Do you want to enroll in
-                          <span className="ml-1">{batchname}</span> ?
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button
-                            variant="secondary"
-                            className="bg-gray-700 hover:opacity-95"
-                            onClick={handleClose}
-                          >
-                            No
-                          </Button>
-                          <Button
-                            variant="primary"
-                            className="bg-blue-700 hover:opacity-95"
-                            onClick={() =>
-                              handleEnroll({
-                                id,
-                                batchname,
-                                techname,
-                                trainername,
-                                startdate,
-                              })
-                            }
-                          >
-                            Yes
-                          </Button>
-                        </Modal.Footer>
-                      </Modal>
                     </td>
                   </tr>
                 )
