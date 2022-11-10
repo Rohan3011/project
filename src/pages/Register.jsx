@@ -1,8 +1,15 @@
 import React, { useState } from "react";
-import { Button, ButtonGroup, Form, ToggleButton } from "react-bootstrap";
+import {
+  Button,
+  ButtonGroup,
+  Form,
+  Spinner,
+  ToggleButton,
+} from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
+import { BsCheckCircleFill } from "react-icons/bs";
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -25,11 +32,13 @@ const REGISTER_URL = "http://localhost:8081/api/users/register";
 
 export default function Register() {
   const [errorMsg, setErrorMsg] = useState("");
-  const [radioValue, setRadioValue] = useState("1");
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [userType, setUserType] = useState("student");
 
   const radios = [
-    { name: "Student", value: "1" },
-    { name: "Trainer", value: "2" },
+    { name: "Student", value: "student" },
+    { name: "Trainer", value: "trainer" },
   ];
 
   return (
@@ -43,174 +52,213 @@ export default function Register() {
           </Link>{" "}
         </span>
       </div>
-      <div className="w-full max-w-md bg-white p-4 border rounded-md">
-        <Formik
-          validationSchema={schema}
-          onSubmit={async (values) => {
-            try {
-              setErrorMsg("");
-              const response = await fetch(REGISTER_URL, {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                redirect: "follow",
-                referrerPolicy: "no-referrer",
-                body: JSON.stringify({
-                  userid: values.userId,
-                  password: values.password,
-                  name: values.name,
-                  email: values.email,
-                  moblie: values.mobile,
-                  usertype: radioValue,
-                  techname: values.techname,
-                }),
-              });
-              console.log(response.json());
-            } catch (error) {
-              console.log(error);
-              setErrorMsg("Register Failed! Please try again");
-            }
-          }}
-          initialValues={{
-            name: "",
-            email: "",
-            mobile: "",
-            userId: "",
-            password: "",
-            userType: "",
-            techname: "",
-          }}
-        >
-          {({ handleSubmit, handleChange, handleBlur, values, errors }) => (
-            <Form className="space-y-2" onSubmit={handleSubmit}>
-              <ButtonGroup className="w-full mb-2">
-                {radios.map((radio, idx) => (
-                  <ToggleButton
-                    key={idx}
-                    id={`radio-${idx}`}
-                    type="radio"
-                    name="userType"
-                    variant={
-                      radioValue === radio.value ? "primary" : "outline-primary"
-                    }
-                    value={radio.value}
-                    checked={radioValue === radio.value}
-                    onChange={(e) => setRadioValue(e.currentTarget.value)}
+      {isLoading ? (
+        <Spinner variant="primary" />
+      ) : success ? (
+        <RegisterdSuccess />
+      ) : (
+        <div className="w-full max-w-md bg-white p-4 border rounded-md">
+          <Formik
+            validationSchema={schema}
+            onSubmit={async (values) => {
+              try {
+                setIsLoading(true);
+                setErrorMsg("");
+                const response = await fetch(
+                  `http://localhost:8081/api/${userType}/register`,
+                  {
+                    method: "POST",
+                    mode: "cors",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    redirect: "follow",
+                    referrerPolicy: "no-referrer",
+                    body: JSON.stringify({
+                      userid: values.userId,
+                      password: values.password,
+                      name: values.name,
+                      email: values.email,
+                      moblie: values.mobile,
+                      usertype: userType,
+                      techname: values.techname,
+                    }),
+                  }
+                );
+                console.log(response.json());
+                setSuccess(true);
+              } catch (err) {
+                if (!err?.response) {
+                  setErrorMsg("No Server Response");
+                } else if (err.response?.status == 400) {
+                  setErrorMsg("Missing UserId or Password");
+                } else if (err.response?.status == 401) {
+                  setErrorMsg("Unauthorized");
+                } else {
+                  setErrorMsg("Register Failed!");
+                }
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+            initialValues={{
+              name: "",
+              email: "",
+              mobile: "",
+              userId: "",
+              password: "",
+              userType: "",
+              techname: "",
+            }}
+          >
+            {({ handleSubmit, handleChange, handleBlur, values, errors }) => (
+              <Form className="space-y-2" onSubmit={handleSubmit}>
+                <ButtonGroup className="w-full mb-2">
+                  {radios.map((radio, idx) => (
+                    <ToggleButton
+                      key={idx}
+                      id={`radio-${idx}`}
+                      type="radio"
+                      name="userType"
+                      variant={
+                        userType === radio.value ? "primary" : "outline-primary"
+                      }
+                      value={radio.value}
+                      checked={userType === radio.value}
+                      onChange={(e) => setUserType(e.currentTarget.value)}
+                    >
+                      {radio.name}
+                    </ToggleButton>
+                  ))}
+                </ButtonGroup>
+
+                <Form.Group className="">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="name"
+                    placeholder="Enter your full name"
+                    value={values.name}
+                    onChange={handleChange}
+                    isInvalid={!!errors.name}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.name}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    value={values.email}
+                    onChange={handleChange}
+                    isInvalid={!!errors.email}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="">
+                  <Form.Label>Mobile Number</Form.Label>
+                  <Form.Control
+                    type="tel"
+                    name="mobile"
+                    placeholder="Enter mobile number"
+                    value={values.mobile}
+                    onChange={handleChange}
+                    isInvalid={!!errors.mobile}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.mobile}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="">
+                  <Form.Label>UserID</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="userId"
+                    placeholder="Enter UserID"
+                    value={values.userId}
+                    onChange={handleChange}
+                    isInvalid={!!errors.userId}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.userId}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    placeholder="Enter mobile Password"
+                    value={values.password}
+                    onChange={handleChange}
+                    isInvalid={!!errors.password}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group hidden={userType != "2"}>
+                  <Form.Label>Technology name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="techname"
+                    placeholder="Enter Technology Name"
+                    value={values.techname}
+                    onChange={handleChange}
+                    isInvalid={!!errors.techname}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.techname}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="mt-3">
+                  <Button
+                    className="w-full bg-blue-700 hover:opacity-95"
+                    type="submit"
                   >
-                    {radio.name}
-                  </ToggleButton>
-                ))}
-              </ButtonGroup>
+                    Submit
+                  </Button>
+                </Form.Group>
 
-              <Form.Group className="">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="name"
-                  placeholder="Enter your full name"
-                  value={values.name}
-                  onChange={handleChange}
-                  isInvalid={!!errors.name}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.name}
-                </Form.Control.Feedback>
-              </Form.Group>
+                {errorMsg && (
+                  <div>
+                    <span className="text-red-700 text-sm">{errorMsg}</span>
+                  </div>
+                )}
+              </Form>
+            )}
+          </Formik>
+        </div>
+      )}
+    </div>
+  );
+}
 
-              <Form.Group className="">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  value={values.email}
-                  onChange={handleChange}
-                  isInvalid={!!errors.email}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.email}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="">
-                <Form.Label>Mobile Number</Form.Label>
-                <Form.Control
-                  type="tel"
-                  name="mobile"
-                  placeholder="Enter mobile number"
-                  value={values.mobile}
-                  onChange={handleChange}
-                  isInvalid={!!errors.mobile}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.mobile}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="">
-                <Form.Label>UserID</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="userId"
-                  placeholder="Enter UserID"
-                  value={values.userId}
-                  onChange={handleChange}
-                  isInvalid={!!errors.userId}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.userId}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="password"
-                  placeholder="Enter mobile Password"
-                  value={values.password}
-                  onChange={handleChange}
-                  isInvalid={!!errors.password}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.password}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group hidden={radioValue != "2"}>
-                <Form.Label>Technology name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="techname"
-                  placeholder="Enter Technology Name"
-                  value={values.techname}
-                  onChange={handleChange}
-                  isInvalid={!!errors.techname}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.techname}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="mt-3">
-                <Button
-                  className="w-full bg-blue-700 hover:opacity-95"
-                  type="submit"
-                >
-                  Submit
-                </Button>
-              </Form.Group>
-
-              {errorMsg && (
-                <div>
-                  <span className="text-red-700 text-sm">{errorMsg}</span>
-                </div>
-              )}
-            </Form>
-          )}
-        </Formik>
+function RegisterdSuccess() {
+  return (
+    <div className="w-full h-full ">
+      <div className=" pt-8 pb-10 flex flex-col gap-6  items-center">
+        <BsCheckCircleFill className="text-5xl text-green-700" />
+        <h1 className="text-5xl font-bold text-center mb-3">
+          Registered Successfully!
+        </h1>
+        <span className="text-lg text-center font-semibold">
+          Go to{" "}
+          <Link className="text-blue-700 underline " to={"/login"}>
+            Login
+          </Link>{" "}
+        </span>
       </div>
     </div>
   );

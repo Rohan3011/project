@@ -1,5 +1,9 @@
 import React from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Register from "./pages/Register";
@@ -9,11 +13,12 @@ import Temp from "./pages/temp";
 import Admin from "./pages/Admin";
 import Trainer from "./pages/Trainer";
 import Student from "./pages/Student";
+import Home from "./pages/Home";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Temp />,
+    element: <Navigate to="/login" />,
   },
   {
     path: "/register",
