@@ -72,7 +72,7 @@ export default function BatchList() {
                   <tr key={id}>
                     <td>{id}</td>
                     <td>{batchname}</td>
-                    <td>{technology}</td>
+                    <td>{techname}</td>
                     <td>{trainername}</td>
                     <td>{startdate}</td>
                     <td>
