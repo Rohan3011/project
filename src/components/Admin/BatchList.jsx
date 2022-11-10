@@ -59,7 +59,7 @@ export default function BatchList() {
                   <Button
                     variant="danger"
                     size="sm"
-                    className="bg-red-700 hover:opacity-95"
+                    className="bg-red-600 hover:opacity-95"
                     onClick={handleShow}
                   >
                     Delete

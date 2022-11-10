@@ -1,12 +1,12 @@
 import React from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { MdAdminPanelSettings } from "react-icons/md";
 
 export default function Header() {
   return (
     <>
-      <Navbar fixed="top" className="border-b bg-white">
-        <Container>
+      <Navbar fixed="top" cvariant="primary" bg="light" className="border-b">
+        <Container className="">
           <Navbar.Brand
             className="flex items-center space-x-4 text-xl font-semibold"
             href="/admin"
@@ -19,6 +19,11 @@ export default function Header() {
             <Nav.Link href="#createbatch">Create Batch</Nav.Link>
             <Nav.Link href="#enrolllist">Enroll List</Nav.Link>
           </Nav>
+          <div className="ml-auto">
+            <Button variant="danger" className="bg-red-600 hover:opacity-95">
+              Logout
+            </Button>
+          </div>
         </Container>
       </Navbar>
     </>

@@ -5,7 +5,7 @@ import { HiAcademicCap } from "react-icons/hi";
 export default function Header() {
   return (
     <>
-      <Navbar fixed="top" className="border-b bg-white">
+      <Navbar fixed="top" variant="primary" bg="light" className="border-b">
         <Container>
           <Navbar.Brand className="flex items-end" href="/student">
             <HiAcademicCap className="w-6 h-6 mr-2" />
@@ -14,6 +14,7 @@ export default function Header() {
           <Nav className="me-auto">
             <Nav.Link href="#myenrollments">My Enrollment</Nav.Link>
             <Nav.Link href="#enrollbatch">Enroll Batch</Nav.Link>
+            <Nav.Link href="#feedback">Feedback</Nav.Link>
           </Nav>
         </Container>
       </Navbar>

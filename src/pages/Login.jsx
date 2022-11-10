@@ -77,7 +77,7 @@ export default function Login() {
                   }
                 );
                 console.log(response.json());
-                setAuth(values);
+                setAuth({ ...values, userType: userType });
                 setSuccess(true);
               } catch (err) {
                 if (!err?.response) {
@@ -158,7 +158,7 @@ export default function Login() {
                 </Form.Group>
                 {errorMsg && (
                   <div>
-                    <span className="text-red-700 text-sm">{errorMsg}</span>
+                    <span className="text-red-600 text-sm">{errorMsg}</span>
                   </div>
                 )}
               </Form>

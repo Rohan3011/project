@@ -5,12 +5,13 @@ import BatchList from "../components/Admin/BatchList";
 import CreateBatch from "../components/Admin/CreateBatch";
 import EnrollList from "../components/Admin/EnrollList";
 import Header from "../components/Admin/Header";
+import ProtectedRoutes from "../utils/ProtectedRoutes";
 
 export default function Admin() {
   const { hash } = useLocation();
 
   return (
-    <div>
+    <ProtectedRoutes userType={"admin"}>
       <Header />
       {hash == "#createbatch" ? (
         <CreateBatch />
@@ -19,6 +20,6 @@ export default function Admin() {
       ) : (
         <BatchList />
       )}
-    </div>
+    </ProtectedRoutes>
   );
 }

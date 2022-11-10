@@ -5,7 +5,7 @@ import { FaChalkboardTeacher } from "react-icons/fa";
 export default function Header() {
   return (
     <>
-      <Navbar fixed="top" className="border-b bg-white">
+      <Navbar fixed="top" variant="primary" bg="light" className="border-b">
         <Container>
           <Navbar.Brand className="flex items-end" href="/trainer">
             <FaChalkboardTeacher className="w-6 h-6 mr-2" />

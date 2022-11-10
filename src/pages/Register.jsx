@@ -233,7 +233,7 @@ export default function Register() {
 
                 {errorMsg && (
                   <div>
-                    <span className="text-red-700 text-sm">{errorMsg}</span>
+                    <span className="text-red-600 text-sm">{errorMsg}</span>
                   </div>
                 )}
               </Form>
