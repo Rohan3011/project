@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ADD_ENROLL_URL, BATCH_URL, ENROLL_URL } from "../../api";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Container, Modal, Spinner, Table } from "react-bootstrap";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { RiAlertFill } from "react-icons/ri";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthProvider";
 
 const dummy = [
   {
@@ -35,11 +36,12 @@ export default function EnrollBatch() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [success, setSuccess] = useState(false);
+  const { auth } = useContext(AuthContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const handleEnroll = async (enrolldata) => {
+  const handleEnroll = async (val) => {
     try {
       setLoading(true);
       setErrorMsg("");
@@ -51,7 +53,13 @@ export default function EnrollBatch() {
         },
         redirect: "follow",
         referrerPolicy: "no-referrer",
-        body: JSON.stringify(enrolldata),
+        body: JSON.stringify({
+          batchname: val?.batchname,
+          techname: val?.techname,
+          trainername: val?.trainername,
+          startdate: val?.startdate,
+          studentname: auth?.studentname,
+        }),
       });
       const d = await response.json();
       console.log(d);
