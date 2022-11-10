@@ -53,7 +53,8 @@ export default function EnrollBatch() {
         referrerPolicy: "no-referrer",
         body: JSON.stringify(enrolldata),
       });
-      console.log(response.json());
+      const d = await response.json();
+      console.log(d);
       refetch();
     } catch (error) {
       console.log(error);
