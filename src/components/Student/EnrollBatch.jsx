@@ -31,11 +31,6 @@ const dummy = [
 ];
 
 export default function EnrollBatch() {
-  const navigate = useNavigate();
-
-  const refreshPage = () => {
-    navigate("/student");
-  };
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -59,7 +54,7 @@ export default function EnrollBatch() {
         body: JSON.stringify(enrolldata),
       });
       console.log(response.json());
-      refreshPage();
+      refetch();
     } catch (error) {
       console.log(error);
       setErrorMsg(true);
@@ -69,7 +64,7 @@ export default function EnrollBatch() {
     }
   };
 
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, error, data, refetch } = useQuery({
     queryKey: ["enrollbatch"],
     queryFn: () => fetch(BATCH_URL).then((res) => res.json()),
   });

@@ -52,7 +52,7 @@ export default function EnrollList() {
     <>
       {data ? (
         <Container id="enrolllist" className="mt-20">
-          <h1 className="text-5xl font-bold mb-8">My Enrollments</h1>
+          <h1 className="text-5xl font-bold mb-8">Enrollments</h1>
           <Table striped bordered>
             <thead>
               <tr>

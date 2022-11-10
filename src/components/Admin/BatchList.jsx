@@ -31,8 +31,6 @@ import { BATCH_URL, ENROLL_URL } from "../../api";
 // ];
 
 export default function BatchList() {
-  const navigate = useNavigate();
-
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -49,7 +47,7 @@ export default function BatchList() {
         method: "DELETE",
       });
       console.log(response.json());
-      refreshPage();
+      refetch();
     } catch (error) {
       console.log(error);
       setErrorMsg(true);
@@ -60,7 +58,7 @@ export default function BatchList() {
   };
 
   // Fetch Batchs
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, error, data, refetch } = useQuery({
     queryKey: ["fetchBatch"],
     queryFn: () => fetch(BATCH_URL).then((res) => res.json()),
   });
