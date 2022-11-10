@@ -11,7 +11,8 @@ export default function Admin() {
   const { hash } = useLocation();
 
   return (
-    <ProtectedRoutes userType={"admin"}>
+    <>
+      {/* <ProtectedRoutes userType={"admin"}> */}
       <Header />
       {hash == "#createbatch" ? (
         <CreateBatch />
@@ -20,6 +21,7 @@ export default function Admin() {
       ) : (
         <BatchList />
       )}
-    </ProtectedRoutes>
+      {/* </ProtectedRoutes> */}
+    </>
   );
 }

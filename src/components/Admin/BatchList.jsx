@@ -67,7 +67,7 @@ export default function BatchList() {
 
                   <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
-                      <Modal.Title>Modal heading</Modal.Title>
+                      <Modal.Title>Confirm</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                       Woohoo, you're sure to delete batch{" "}

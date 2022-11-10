@@ -45,24 +45,24 @@ export default function Feedback() {
                 try {
                   setIsLoading(true);
                   setErrorMsg("");
-                  const response = await fetch(
-                    `http://localhost:8081/api/${userType}/login`,
-                    {
-                      method: "POST",
-                      mode: "cors",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      redirect: "follow",
-                      referrerPolicy: "no-referrer",
-                      body: JSON.stringify({
-                        userid: values.userId,
-                        password: values.password,
-                        usertype: userType,
-                      }),
-                    }
-                  );
-                  console.log(response.json());
+                  // const response = await fetch(
+                  //   `http://localhost:8081/api/${userType}/login`,
+                  //   {
+                  //     method: "POST",
+                  //     mode: "cors",
+                  //     headers: {
+                  //       "Content-Type": "application/json",
+                  //     },
+                  //     redirect: "follow",
+                  //     referrerPolicy: "no-referrer",
+                  //     body: JSON.stringify({
+                  //       userid: values.userId,
+                  //       password: values.password,
+                  //       usertype: userType,
+                  //     }),
+                  //   }
+                  // );
+                  console.log(values);
                   setSuccess(true);
                 } catch (err) {
                   if (!err?.response) {

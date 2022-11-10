@@ -3,6 +3,7 @@ import { Alert, Button, Container, Form, Spinner } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useQuery } from "@tanstack/react-query";
+import { TRAINER_URL } from "../../api";
 
 const today = new Date(
   new Date().getFullYear(),
@@ -22,9 +23,6 @@ const schema = Yup.object().shape({
   trainername: Yup.string().required("Trainer name is required"),
   technology: Yup.string().required("Technology is required"),
 });
-
-const TRAINER_URL = "http://localhost:8081/api/trainer/";
-const BATCH_URL = "http://localhost:8081/api/batch/";
 
 export default function CreateBatch() {
   const [errorMsg, setErrorMsg] = useState(false);

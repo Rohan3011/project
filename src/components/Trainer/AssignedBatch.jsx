@@ -1,31 +1,49 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { Container, Table } from "react-bootstrap";
+import { Container, Spinner, Table } from "react-bootstrap";
+import { AiFillCloseCircle } from "react-icons/ai";
+import { Link } from "react-router-dom";
+import { BATCH_URL } from "../../api";
 
 const dummy = [
   {
     id: 1,
     batchname: "b1",
-    technology: "java",
+    techname: "java",
     trainername: "Xyz",
     startdate: new Date().toDateString(),
   },
   {
     id: 2,
     batchname: "b1",
-    technology: "java",
+    techname: "java",
     trainername: "Xyz",
     startdate: new Date().toDateString(),
   },
   {
     id: 3,
     batchname: "b1",
-    technology: "java",
+    techname: "java",
     trainername: "Xyz",
     startdate: new Date().toDateString(),
   },
 ];
 
 export default function AssignedBatch() {
+  // Fetch Batchs
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["fetchBatch"],
+    queryFn: () => fetch(BATCH_URL).then((res) => res.json()),
+  });
+
+  if (isLoading)
+    return (
+      <Container className="mt-20 w-full flex justify-center items-center">
+        <Spinner variant="primary" />
+      </Container>
+    );
+  if (error) return <BatchFailed />;
+
   return (
     <Container id="batchlist" className="mt-20">
       <h1 className="text-5xl font-bold mb-8">Assigned Batch</h1>
@@ -40,19 +58,36 @@ export default function AssignedBatch() {
           </tr>
         </thead>
         <tbody>
-          {dummy.map(
-            ({ id, batchname, technology, trainername, startdate }) => (
-              <tr key={id}>
-                <td>{id}</td>
-                <td>{batchname}</td>
-                <td>{technology}</td>
-                <td>{trainername}</td>
-                <td>{startdate}</td>
-              </tr>
-            )
-          )}
+          {data?.map(({ id, batchname, techname, trainername, startdate }) => (
+            <tr key={id}>
+              <td>{id}</td>
+              <td>{batchname}</td>
+              <td>{techname}</td>
+              <td>{trainername}</td>
+              <td>{startdate}</td>
+            </tr>
+          ))}
         </tbody>
       </Table>
+    </Container>
+  );
+}
+
+function BatchFailed() {
+  return (
+    <Container className="w-full h-full mt-20 bg-red-50 rounded shadow">
+      <div className=" pt-8 pb-10 flex flex-col gap-6  items-center">
+        <AiFillCloseCircle className="text-5xl text-red-700" />
+        <h1 className="text-5xl font-bold text-center mb-3">
+          Failed to fetch batch!
+        </h1>
+        <span className="text-lg text-center font-semibold">
+          Try{" "}
+          <Link className="text-blue-700 underline " to={"/trainer"}>
+            refresh
+          </Link>{" "}
+        </span>
+      </div>
     </Container>
   );
 }

@@ -29,8 +29,6 @@ const schema = Yup.object().shape({
   techname: Yup.string().optional(),
 });
 
-const REGISTER_URL = "http://localhost:8081/api/users/register";
-
 export default function Register() {
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -208,7 +206,7 @@ export default function Register() {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group hidden={userType != "2"}>
+                <Form.Group hidden={userType != "trainer"}>
                   <Form.Label>Technology name</Form.Label>
                   <Form.Control
                     type="text"

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { MdAdminPanelSettings } from "react-icons/md";
+import Logout from "../shared/Logout";
 
 export default function Header() {
   return (
@@ -20,9 +21,7 @@ export default function Header() {
             <Nav.Link href="#enrolllist">Enroll List</Nav.Link>
           </Nav>
           <div className="ml-auto">
-            <Button variant="danger" className="bg-red-600 hover:opacity-95">
-              Logout
-            </Button>
+            <Logout />
           </div>
         </Container>
       </Navbar>
