@@ -8,6 +8,7 @@ import { AuthProvider } from "./context/AuthProvider";
 import Temp from "./pages/temp";
 import Admin from "./pages/Admin";
 import Trainer from "./pages/Trainer";
+import Student from "./pages/Student";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,12 @@ const router = createBrowserRouter([
     path: "/trainer",
     element: <Trainer />,
   },
+  {
+    path: "/student",
+    element: <Student />,
+  },
 ]);
+
 const queryClient = new QueryClient();
 
 export default function App() {
