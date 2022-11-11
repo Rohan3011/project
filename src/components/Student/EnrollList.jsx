@@ -66,13 +66,13 @@ export default function EnrollList() {
             </thead>
             <tbody>
               {data.map(
-                ({ id, batchname, techname, trainername, startdate }) => (
+                ({ id, batchname, techname, trainername, startDate }) => (
                   <tr key={id}>
                     <td>{id}</td>
                     <td>{batchname}</td>
                     <td>{techname}</td>
                     <td>{trainername}</td>
-                    <td>{startdate}</td>
+                    <td>{startDate}</td>
                   </tr>
                 )
               )}

@@ -54,7 +54,7 @@ export default function EnrollBatch() {
           batchname: val?.batchname,
           techname: val?.techname,
           trainername: val?.trainername,
-          startdate: val?.startdate,
+          startDate: val?.startdate,
           studentname: auth?.studentname,
         }),
       });
