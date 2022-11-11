@@ -65,8 +65,9 @@ export default function EnrollList() {
               </tr>
             </thead>
             <tbody>
-              {data.map(
-                ({ id, batchname, techname, trainername, startDate }) => (
+              {data
+                ?.filter((val) => val.studentname == auth?.studentname)
+                .map(({ id, batchname, techname, trainername, startDate }) => (
                   <tr key={id}>
                     <td>{id}</td>
                     <td>{batchname}</td>
@@ -74,8 +75,7 @@ export default function EnrollList() {
                     <td>{trainername}</td>
                     <td>{startDate}</td>
                   </tr>
-                )
-              )}
+                ))}
             </tbody>
           </Table>
         </Container>
