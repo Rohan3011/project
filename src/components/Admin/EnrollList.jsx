@@ -61,7 +61,6 @@ export default function EnrollList() {
                 <th>Batch Name</th>
                 <th>Technology</th>
                 <th>Trainer Name</th>
-                <th>Start Date</th>
               </tr>
             </thead>
             <tbody>
@@ -80,7 +79,6 @@ export default function EnrollList() {
                     <td>{batchname}</td>
                     <td>{techname}</td>
                     <td>{trainername}</td>
-                    <td>{startdate}</td>
                   </tr>
                 )
               )}
