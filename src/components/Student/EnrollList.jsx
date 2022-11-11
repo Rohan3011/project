@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ENROLL_URL } from "../../api";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Container, Modal, Spinner, Table } from "react-bootstrap";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { RiAlertFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import AuthContext from "../../context/AuthProvider";
 
 // const dummy = [
 //   {
@@ -34,6 +35,8 @@ import { Link } from "react-router-dom";
 // ];
 
 export default function EnrollList() {
+  const { auth } = useContext(AuthContext);
+
   // Fetch EnrollList
   const { isLoading, error, data } = useQuery({
     queryKey: ["enrolllist"],
